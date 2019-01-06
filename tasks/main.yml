@@ -1,0 +1,20 @@
+---
+# tasks file for ansible-filebeat
+- include: repos.yml
+- name: Install Filebeat
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - filebeat
+
+
+- name: create filebeat config
+  template: src=filebeat.yml.j2 dest=/etc/filebeat/filebeat.yml
+
+- name: Enable system module
+  template: src=system.yml.j2 dest=/etc/filebeat/modules.d/system.yml
+
+- name: Start filebeat
+  service: name=filebeat state=started enabled=yes
+  become: yes

@@ -1,0 +1,13 @@
+- name: create ELK repo file
+  template: src=elk-install-repo.list.j2 dest=/etc/apt/sources.list.d/elk-install-repo.list
+
+- name: Add the ELK apt key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+    
+- name: Update the host with the new repo
+  apt:
+    upgrade: dist
+    update_cache: yes
+    force: yes
